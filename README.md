@@ -1,4 +1,4 @@
-# Desafio Trade
+# Desafio Receituário
 
 Quer fazer parte da transformação do campo ~~escrevendo~~ codando o futuro do agronegócio?
 
@@ -17,19 +17,24 @@ Estamos com nossos clientes, pra fazer o campo acontecer. Temos orgulho de ajuda
 
 # O desafio
 
-Um determinado produtor necessita armazenar a sua produção de soja deste ano. Sendo assim este produtor irá realizar um contrato de venda para uma trade que será responsável por armazenar os grãos em seus silos.
+Alguns produtos utilizados no campo, são controlados pelo ministério da Agricultura, estes produtos exigem um receituário assinado por um Técnico Agrícola.
 
-Basicamente no contrato de venda identificamos o produtor, a trade, o grão que será negociado e a quantidade. Cada contrato deve permitir a negociação de apenas um tipo de grão.
-	
-Uma trade pode possuir mais de um silo para armazenagem que geralmente tem a capacidade de armazenamento de 90.000 kg de grãos, independente do grão armazenado.
-	
-Desenvolva um aplicativo que seja possível gerenciar os contratos de vendas realizados entre o produtor e a trade, de forma que na gravação do contrato o sistema faça a distribuição automática dos grãos nos silos da trade. 
-  
-Cuidado com o limite de cada silo e suas validações básicas.
-  
-	O aplicativo deve permitir filtrar os contratos informando o CNPJ do produtor ou da trade.
-	O aplicativo deve permitir gerenciar vários contratos de venda, de várias trades e produtores diferentes.
-	O aplicativo deve permitir imprimir um relatório contendo todos os contratos cadastrados informando o nome do produto, nome da trade, o grão do contrato e a quantidade armazenada em kg.
+Considerando a descrição acima, desenvolva um aplicativo onde o usuário possa realizar uma venda e automaticamente o sistema identifique os produtos que possuem necessidade de emissão de receita. Com os itens necessários para emissão de receita, será criado um registro de solicitação de assinatura vinculado ao técnico selecionado no ato da venda.
+
+## Requisitos 
+* Cadastro de clientes:
+> Deverá ser criado um cadastro de clientes contendo o nome e CPF do cliente. Este cadastro deverá possuir as validações necessárias para garantir as consistências dos dados.
+* Cadastro de técnico agrícola:
+> Deverá ser criado apenas uma tabela técnico agrícola contendo o nome, CPF e número de registro, não será necessário criar tela para cadastro dessas informações. O número de registro deverá ser do tipo string. Efetue a carga desta tabela com pelo menos 3 técnicos agrícolas.
+* Cadastro de produtos:
+> Deverá ser criado uma tela para cadastro de produto onde o cliente informa o nome, valor e se o produto exige controle especial. Implemente as validações necessárias para garantir as consistências de dados.
+* Pedido de venda:
+> Crie uma tela para realização do pedido de venda, nesta tela o usuário irá informar o cliente para quem está realizando a venda, a data do pedido será preenchida automaticamente com a data atual do sistema. O usuário deverá informar no mínimo 1 produto para efetuar a gravação do pedido de venda. O usuário deverá informar a quantidade do item e o aplicativo deverá calcular automaticamente o total de cada item bem como o total do pedido.
+Caso não exista nenhum item na receita que exija controle especial, o aplicativo deverá gravar o pedido com status “Concluído”.
+Caso exista produtos com controle especial, o sistema deverá automaticamente criar uma solicitação de receita, informando o pedido, itens que exigem controle especial e o técnico responsável pela assinatura, o pedido deverá ficar com o status “Aguardando Receita”.
+Fique livre para desenvolver este controle de solicitação da forma que entender melhor, só cuide para que todos os itens necessários para realização de uma assinatura estejam presentes.
+* Solicitação de receita:
+> Deverá ser criado uma consulta onde o usuário possa consultar todas as solicitações de receitas pendentes de assinatura. Após localizar as receitas pendentes, o usuário deverá selecionar a solicitação de receita e acionar a opção de “Assinar Receita”. Dessa forma assim que a assinatura for realizada o status do pedido irá mudar para “Pedido concluído”.
   
   Siga abaixo a estrutura de diretórios  já criada para este projeto:
   
