@@ -26,7 +26,7 @@ inherited frmClientes: TfrmClientes
   inherited btnCancelar: TButton
     Left = 596
     Top = 400
-    TabOrder = 4
+    TabOrder = 5
     ExplicitLeft = 596
     ExplicitTop = 400
   end
@@ -50,12 +50,12 @@ inherited frmClientes: TfrmClientes
     ExplicitTop = 67
   end
   inherited DBGrid2: TDBGrid
-    TabOrder = 5
+    TabOrder = 6
   end
   inherited btnNovo: TButton
     Left = 415
     Top = 400
-    TabOrder = 6
+    TabOrder = 4
     ExplicitLeft = 415
     ExplicitTop = 400
   end

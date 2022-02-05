@@ -10,9 +10,6 @@ uses
   Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.StdCtrls, Vcl.Mask,
   Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids;
 
-const
-  SQL  = 'SELECT * FROM PEDIDOS ORDER BY PEDI_ID DESC';
-
 type
   TfrmVendas = class(TfrmBasico)
     qryItens: TFDQuery;
@@ -43,36 +40,44 @@ type
     btnRetira: TButton;
     btnAdiciona: TButton;
     qryItensTOTAL_ITEM: TCurrencyField;
+    Label8: TLabel;
+    lbTotal: TLabel;
     qryTabelaPEDI_ID: TIntegerField;
     qryTabelaPEDI_CLIE_ID: TIntegerField;
     qryTabelaPEDI_TOTAL: TBCDField;
     qryTabelaPEDI_DT_CADASTRO: TDateField;
+    qryTabelaPEDI_STATUS: TStringField;
     qryTabelaPEDI_CLIE_NOME: TStringField;
     qryTabelaPEDI_CLIE_CPF: TStringField;
-    qryTabelaPEDI_STATUS: TStringField;
+    qryTabelaPEDI_ASSINADO: TStringField;
+    qryTabelaPEDI_TECN_ID: TIntegerField;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnAdicionaClick(Sender: TObject);
-    procedure qryTabelaAfterInsert(DataSet: TDataSet);
     procedure qryItensCalcFields(DataSet: TDataSet);
     procedure qryTabelaAfterApplyUpdates(DataSet: TFDDataSet; AErrors: Integer);
     procedure qryItensAfterInsert(DataSet: TDataSet);
     procedure edtCodClienteExit(Sender: TObject);
     procedure edtCodItemExit(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
-    procedure qryTabelaBeforeOpen(DataSet: TDataSet);
     procedure DBGrid2Enter(Sender: TObject);
+    procedure btnRetiraClick(Sender: TObject);
+    procedure qryTabelaNewRecord(DataSet: TDataSet);
+    procedure btnNovoClick(Sender: TObject);
+    procedure qryItensBeforePost(DataSet: TDataSet);
+    procedure qryItensBeforeDelete(DataSet: TDataSet);
   private
-    procedure PesquisaCliente;
-    procedure PesquisaProduto;
     function ValidaItens: Boolean;
     function ValidaDados: Boolean;
+    procedure OpenFDQuery;
+    procedure TotalPedido(fltValor: Real = 0);
     { Private declarations }
   public
     { Public declarations }
   end;
 
 var
+  fltTotal : Real;
   frmVendas: TfrmVendas;
 
 implementation
@@ -121,6 +126,20 @@ begin
   Result := true;
 end;
 
+procedure TfrmVendas.btnNovoClick(Sender: TObject);
+begin
+  inherited;
+  if edtCodCliente.CanFocus then
+    edtCodCliente.SetFocus;
+end;
+
+procedure TfrmVendas.btnRetiraClick(Sender: TObject);
+begin
+  inherited;
+  if not qryItens.IsEmpty then
+    qryItens.Delete;
+end;
+
 procedure TfrmVendas.btnSalvarClick(Sender: TObject);
 begin
   if not ValidaDados() then Exit;
@@ -145,6 +164,24 @@ begin
       edtCodItem.SetFocus;
     Exit;
   end;
+  try
+    qryItens.DisableControls;
+    qryItens.First;
+    while not qryItens.Eof do
+    begin
+      if qryItens.FieldByName('ITEM_PROD_CONTROLE').AsString = 'S' then
+      begin
+        ShowMessage('A T E N Ç Ã O ! ! !'+#13#13+
+                    'Um ou mais produto(s) possuem controle especial e vão precisar ser(em) assinado(s) por um técnico agrícola!');
+        qryTabela.FieldByName('PEDI_ASSINADO').AsString := 'N';
+        qryTabela.FieldByName('PEDI_STATUS').AsString   := 'A';
+        Break;
+      end;
+      qryItens.Next;
+    end;
+  finally
+    qryItens.EnableControls;
+  end;
   Result := true;
 end;
 
@@ -157,59 +194,20 @@ end;
 
 procedure TfrmVendas.edtCodClienteExit(Sender: TObject);
 begin
+  if Trim(edtCodCliente.Text) = '' then Exit;
+  if not edtCodCliente.Modified then Exit;
+  if not (qryTabela.State in [dsEdit,dsInsert]) then Exit;
   inherited;
-  PesquisaCliente();
+  dmDados.PesquisaCliente(qryTabela,edtCodCliente.Text);
 end;
 
 procedure TfrmVendas.edtCodItemExit(Sender: TObject);
 begin
-  inherited;
-  PesquisaProduto();
-end;
-
-procedure TfrmVendas.PesquisaProduto();
-var
-  qryCons : TFDQuery;
-begin
   if Trim(edtCodItem.Text) = '' then Exit;
   if not edtCodItem.Modified then Exit;
   if not (qryItens.State in [dsEdit,dsInsert]) then Exit;
-  try
-    qryCons := TFDQuery.Create(nil);
-    qryCons.Connection := dmDados.Conexao;
-    qryCons.Close;
-    qryCons.SQL.Clear;
-    qryCons.sql.Add('SELECT PROD_NOME,PROD_VALOR,PROD_CONTROLE FROM PRODUTOS WHERE PROD_ID = ' + edtCodItem.Text);
-    qryCons.Open();
-    qryItens.FieldByName('ITEM_PROD_NOME').AsString     := qryCons.Fields[0].AsString;
-    qryItens.FieldByName('ITEM_VLRUNIT').AsFloat        := qryCons.Fields[1].AsFloat;
-    qryItens.FieldByName('ITEM_PROD_CONTROLE').AsString := qryCons.Fields[2].AsString;
-  finally
-    FreeAndNil(qryCons);
-    edtCodItem.Modified := false;
-  end;
-end;
-
-procedure TfrmVendas.PesquisaCliente();
-var
-  qryCons : TFDQuery;
-begin
-  if Trim(edtCodCliente.Text) = '' then Exit;
-  if not edtCodCliente.Modified then Exit;
-  if not (qryTabela.State in [dsEdit,dsInsert]) then Exit;
-  try
-    qryCons := TFDQuery.Create(nil);
-    qryCons.Connection := dmDados.Conexao;
-    qryCons.Close;
-    qryCons.SQL.Clear;
-    qryCons.sql.Add('SELECT CLIE_NOME,CLIE_CPF FROM CLIENTES WHERE CLIE_ID = ' + edtCodCliente.Text);
-    qryCons.Open();
-    qryTabela.FieldByName('PEDI_CLIE_NOME').AsString := qryCons.Fields[0].AsString;
-    qryTabela.FieldByName('PEDI_CLIE_CPF').AsString  := qryCons.Fields[1].AsString;
-  finally
-    FreeAndNil(qryCons);
-    edtCodCliente.Modified := false;
-  end;
+  inherited;
+  dmDados.PesquisaProduto(qryItens,edtCodItem.Text);
 end;
 
 procedure TfrmVendas.FormCreate(Sender: TObject);
@@ -221,10 +219,16 @@ end;
 
 procedure TfrmVendas.FormShow(Sender: TObject);
 begin
-  qryTabela.SQL.Text := SQL;
+  SQL := 'SELECT * FROM PEDIDOS';
   inherited;
   qryTabela.Append;
   edtCodCliente.SetFocus;
+end;
+
+procedure TfrmVendas.TotalPedido(fltValor : Real = 0);
+begin
+  fltTotal := fltTotal + fltValor;
+  lbTotal.Caption := FormatFloat('$#,##0.00',fltTotal);
 end;
 
 procedure TfrmVendas.qryItensAfterInsert(DataSet: TDataSet);
@@ -232,6 +236,18 @@ begin
   inherited;
   qryItens.FieldByName('ITEM_ID').AsInteger      := dmDados.Generation('ITENSPEDIDO');
   qryItens.FieldByName('ITEM_PEDI_ID').AsInteger := qryTabela.FieldByName('PEDI_ID').AsInteger;
+end;
+
+procedure TfrmVendas.qryItensBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  TotalPedido(qryItensTOTAL_ITEM.AsFloat*-1);
+end;
+
+procedure TfrmVendas.qryItensBeforePost(DataSet: TDataSet);
+begin
+  inherited;
+  TotalPedido(qryItensTOTAL_ITEM.AsFloat);
 end;
 
 procedure TfrmVendas.qryItensCalcFields(DataSet: TDataSet);
@@ -247,16 +263,18 @@ begin
   qryItens.ApplyUpdates(-1);
 end;
 
-procedure TfrmVendas.qryTabelaAfterInsert(DataSet: TDataSet);
+procedure TfrmVendas.qryTabelaNewRecord(DataSet: TDataSet);
 begin
   inherited;
   qryTabela.FieldByName('PEDI_DT_CADASTRO').AsDateTime := Now;
   qryTabela.FieldByName('PEDI_STATUS').AsString        := 'C';
+  OpenFDQuery;
+  fltTotal := 0;
+  TotalPedido();
 end;
 
-procedure TfrmVendas.qryTabelaBeforeOpen(DataSet: TDataSet);
+procedure TfrmVendas.OpenFDQuery;
 begin
-  inherited;
   qryItens.Close;
   qryItens.ParamByName('PEDI_ID').AsInteger := qryTabela.FieldByName('PEDI_ID').AsInteger;
   qryItens.Open();

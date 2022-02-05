@@ -15,8 +15,10 @@ object frmBasico: TfrmBasico
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   DesignSize = (
     694
@@ -107,7 +109,7 @@ object frmBasico: TfrmBasico
     Top = 216
   end
   object qryTabela: TFDQuery
-    AfterInsert = qryTabelaAfterInsert
+    OnNewRecord = qryTabelaNewRecord
     CachedUpdates = True
     Connection = dmDados.Conexao
     Left = 288

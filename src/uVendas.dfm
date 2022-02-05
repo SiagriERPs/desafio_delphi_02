@@ -41,15 +41,38 @@ inherited frmVendas: TfrmVendas
     Caption = 'CPF/CNPJ'
     FocusControl = DBEdit3
   end
+  object Label8: TLabel [5]
+    Left = 11
+    Top = 416
+    Width = 63
+    Height = 13
+    Caption = 'Total Pedido:'
+  end
+  object lbTotal: TLabel [6]
+    Left = 125
+    Top = 416
+    Width = 31
+    Height = 13
+    Alignment = taRightJustify
+    Caption = '$0.00'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   inherited btnSalvar: TButton
     Left = 511
     Top = 433
+    TabOrder = 5
     ExplicitLeft = 511
     ExplicitTop = 433
   end
   inherited btnCancelar: TButton
     Left = 602
     Top = 433
+    TabOrder = 7
     ExplicitLeft = 602
     ExplicitTop = 433
   end
@@ -61,32 +84,35 @@ inherited frmVendas: TfrmVendas
     TabStop = False
     DataField = 'PEDI_CLIE_NOME'
     ReadOnly = True
+    TabOrder = 2
     ExplicitLeft = 114
   end
   inherited DBGrid2: TDBGrid
     Top = 167
     Width = 682
-    Height = 262
+    Height = 235
     DataSource = dsItens
+    TabOrder = 8
     OnEnter = DBGrid2Enter
   end
   inherited btnNovo: TButton
     Left = 420
     Top = 433
+    TabOrder = 6
     ExplicitLeft = 420
     ExplicitTop = 433
   end
-  object edtCodCliente: TDBEdit [11]
+  object edtCodCliente: TDBEdit [13]
     Left = 10
     Top = 66
     Width = 100
     Height = 21
     DataField = 'PEDI_CLIE_ID'
     DataSource = dsTabela
-    TabOrder = 6
+    TabOrder = 1
     OnExit = edtCodClienteExit
   end
-  object DBEdit2: TDBEdit [12]
+  object DBEdit2: TDBEdit [14]
     Left = 592
     Top = 26
     Width = 100
@@ -95,9 +121,9 @@ inherited frmVendas: TfrmVendas
     DataField = 'PEDI_DT_CADASTRO'
     DataSource = dsTabela
     ReadOnly = True
-    TabOrder = 7
+    TabOrder = 9
   end
-  object DBEdit3: TDBEdit [13]
+  object DBEdit3: TDBEdit [15]
     Left = 507
     Top = 67
     Width = 186
@@ -106,15 +132,15 @@ inherited frmVendas: TfrmVendas
     DataField = 'PEDI_CLIE_CPF'
     DataSource = dsTabela
     ReadOnly = True
-    TabOrder = 8
+    TabOrder = 3
   end
-  object Itens: TGroupBox [14]
+  object Itens: TGroupBox [16]
     Left = 10
     Top = 93
     Width = 682
     Height = 68
     Caption = 'Itens'
-    TabOrder = 9
+    TabOrder = 4
     object Label6: TLabel
       Left = 6
       Top = 16
@@ -199,6 +225,7 @@ inherited frmVendas: TfrmVendas
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 5
+      OnClick = btnRetiraClick
     end
     object btnAdiciona: TButton
       Left = 607
@@ -216,8 +243,10 @@ inherited frmVendas: TfrmVendas
       OnClick = btnAdicionaClick
     end
   end
-  object qryItens: TFDQuery [15]
+  object qryItens: TFDQuery [17]
     AfterInsert = qryItensAfterInsert
+    BeforePost = qryItensBeforePost
+    BeforeDelete = qryItensBeforeDelete
     OnCalcFields = qryItensCalcFields
     CachedUpdates = True
     Connection = dmDados.Conexao
@@ -231,7 +260,6 @@ inherited frmVendas: TfrmVendas
       item
         Name = 'PEDI_ID'
         DataType = ftInteger
-        FDDataType = dtInt32
         ParamType = ptInput
         Value = Null
       end>
@@ -309,7 +337,7 @@ inherited frmVendas: TfrmVendas
       Calculated = True
     end
   end
-  object dsItens: TDataSource [16]
+  object dsItens: TDataSource [18]
     DataSet = qryItens
     OnDataChange = dsTabelaDataChange
     Left = 384
@@ -320,12 +348,12 @@ inherited frmVendas: TfrmVendas
     Top = 280
   end
   inherited qryTabela: TFDQuery
-    BeforeOpen = qryTabelaBeforeOpen
+    OnNewRecord = qryTabelaNewRecord
     AfterApplyUpdates = qryTabelaAfterApplyUpdates
     SQL.Strings = (
       'SELECT * FROM PEDIDOS')
-    Left = 320
-    Top = 232
+    Left = 324
+    Top = 231
     object qryTabelaPEDI_ID: TIntegerField
       FieldName = 'PEDI_ID'
       Origin = 'PEDI_ID'
@@ -335,6 +363,7 @@ inherited frmVendas: TfrmVendas
     object qryTabelaPEDI_CLIE_ID: TIntegerField
       FieldName = 'PEDI_CLIE_ID'
       Origin = 'PEDI_CLIE_ID'
+      ProviderFlags = [pfInUpdate]
       Required = True
     end
     object qryTabelaPEDI_TOTAL: TBCDField
@@ -346,6 +375,12 @@ inherited frmVendas: TfrmVendas
     object qryTabelaPEDI_DT_CADASTRO: TDateField
       FieldName = 'PEDI_DT_CADASTRO'
       Origin = 'PEDI_DT_CADASTRO'
+    end
+    object qryTabelaPEDI_STATUS: TStringField
+      FieldName = 'PEDI_STATUS'
+      Origin = 'PEDI_STATUS'
+      FixedChar = True
+      Size = 1
     end
     object qryTabelaPEDI_CLIE_NOME: TStringField
       FieldName = 'PEDI_CLIE_NOME'
@@ -359,11 +394,17 @@ inherited frmVendas: TfrmVendas
       ProviderFlags = []
       Size = 14
     end
-    object qryTabelaPEDI_STATUS: TStringField
-      FieldName = 'PEDI_STATUS'
-      Origin = 'PEDI_STATUS'
+    object qryTabelaPEDI_ASSINADO: TStringField
+      FieldName = 'PEDI_ASSINADO'
+      Origin = 'PEDI_ASSINADO'
+      Visible = False
       FixedChar = True
       Size = 1
+    end
+    object qryTabelaPEDI_TECN_ID: TIntegerField
+      FieldName = 'PEDI_TECN_ID'
+      Origin = 'PEDI_TECN_ID'
+      Visible = False
     end
   end
 end

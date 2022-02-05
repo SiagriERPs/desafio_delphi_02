@@ -11,9 +11,11 @@ type
     SpeedButton1: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
     procedure SpeedButton1Click(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
+    procedure SpeedButton4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -27,7 +29,7 @@ implementation
 
 {$R *.dfm}
 
-uses uClientes, uProdutos, uVendas;
+uses uClientes, uProdutos, uVendas, uSolicitacaoReceita;
 
 procedure TfrmPrincipal.SpeedButton1Click(Sender: TObject);
 begin
@@ -42,6 +44,11 @@ end;
 procedure TfrmPrincipal.SpeedButton3Click(Sender: TObject);
 begin
   frmVendas.ShowModal;
+end;
+
+procedure TfrmPrincipal.SpeedButton4Click(Sender: TObject);
+begin
+  frmSolicitacaoReceita.ShowModal;
 end;
 
 end.

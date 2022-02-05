@@ -25,16 +25,19 @@ type
     procedure btnCancelarClick(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure qryTabelaAfterInsert(DataSet: TDataSet);
     procedure dsTabelaDataChange(Sender: TObject; Field: TField);
     procedure btnNovoClick(Sender: TObject);
+    procedure qryTabelaNewRecord(DataSet: TDataSet);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
   public
     GeneID,
     Table : String;
+    procedure OpenFDQuery(); virtual;
   end;
 
 var
+  SQL : String;
   frmBasico: TfrmBasico;
 
 implementation
@@ -68,14 +71,33 @@ begin
   btnNovo.Enabled := not btnSalvar.Enabled;
 end;
 
-procedure TfrmBasico.FormShow(Sender: TObject);
+procedure TfrmBasico.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
 begin
-  qryTabela.Active := true;
-  if edtNome.CanFocus then
-    edtNome.SetFocus;
+  if Key = VK_RETURN then
+    perform(WM_NEXTDLGCTL,0,0);
+  if key = 27 then
+    Self.Close;
 end;
 
-procedure TfrmBasico.qryTabelaAfterInsert(DataSet: TDataSet);
+procedure TfrmBasico.FormShow(Sender: TObject);
+begin
+  qryTabela.SQL.Text := SQL;
+  qryTabela.Open();
+  if (edtNome.CanFocus) and (not edtNome.ReadOnly) then
+  begin
+    edtNome.SetFocus;
+    qryTabela.Append;
+  end;
+end;
+
+procedure TfrmBasico.OpenFDQuery;
+begin
+  inherited;
+
+end;
+
+procedure TfrmBasico.qryTabelaNewRecord(DataSet: TDataSet);
 begin
   qryTabela.FieldByName(GeneID).AsInteger := dmDados.Generation(Table);
 end;

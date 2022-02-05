@@ -10,10 +10,11 @@ object dmDados: TdmDados
       'DriverID=FB'
       
         'Database=C:\Users\HDTEC DESENV\Documents\GitHub\desafio_delphi_0' +
-        '2\data\DATABASE.FDB'
+        '2\data\SIAGRI.GDB'
       'User_Name=SYSDBA'
       'Password=masterkey'
       'Server=localhost')
+    Connected = True
     LoginPrompt = False
     Left = 232
     Top = 32

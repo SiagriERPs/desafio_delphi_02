@@ -23,7 +23,7 @@ inherited frmProdutos: TfrmProdutos
     TabOrder = 4
   end
   inherited btnCancelar: TButton
-    TabOrder = 5
+    TabOrder = 6
   end
   inherited edtCodigo: TDBEdit
     DataField = 'PROD_ID'
@@ -54,9 +54,6 @@ inherited frmProdutos: TfrmProdutos
     TabOrder = 2
   end
   inherited DBGrid2: TDBGrid
-    TabOrder = 6
-  end
-  inherited btnNovo: TButton
     TabOrder = 7
   end
   inherited qryTabela: TFDQuery

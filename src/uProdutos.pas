@@ -10,9 +10,6 @@ uses
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Vcl.Mask, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids;
 
-const
-  SQL = 'SELECT * FROM PRODUTOS ORDER BY PROD_ID DESC';
-
 type
   TfrmProdutos = class(TfrmBasico)
     qryTabelaPROD_ID: TIntegerField;
@@ -55,7 +52,7 @@ end;
 
 procedure TfrmProdutos.FormShow(Sender: TObject);
 begin
-  qryTabela.SQL.Text := SQL;
+  SQL := 'SELECT * FROM PRODUTOS ORDER BY PROD_ID DESC';
   inherited;
 end;
 
