@@ -14,7 +14,6 @@ object dmDados: TdmDados
       'User_Name=SYSDBA'
       'Password=masterkey'
       'Server=localhost')
-    Connected = True
     LoginPrompt = False
     Left = 232
     Top = 32

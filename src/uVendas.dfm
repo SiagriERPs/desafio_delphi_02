@@ -6,7 +6,6 @@ inherited frmVendas: TfrmVendas
   Constraints.MaxWidth = 0
   Constraints.MinHeight = 0
   Constraints.MinWidth = 0
-  OnCreate = FormCreate
   ExplicitWidth = 706
   ExplicitHeight = 499
   PixelsPerInch = 96
@@ -21,9 +20,9 @@ inherited frmVendas: TfrmVendas
   object Label2: TLabel [2]
     Left = 10
     Top = 50
-    Width = 33
+    Width = 88
     Height = 13
-    Caption = 'Cliente'
+    Caption = 'C'#243'd. Cliente ( F5 )'
   end
   object Label3: TLabel [3]
     Left = 592
@@ -103,10 +102,12 @@ inherited frmVendas: TfrmVendas
     ExplicitTop = 433
   end
   object edtCodCliente: TDBEdit [13]
+    Tag = 1
     Left = 10
     Top = 66
     Width = 100
     Height = 21
+    HelpType = htKeyword
     DataField = 'PEDI_CLIE_ID'
     DataSource = dsTabela
     TabOrder = 1
@@ -144,9 +145,9 @@ inherited frmVendas: TfrmVendas
     object Label6: TLabel
       Left = 6
       Top = 16
-      Width = 48
+      Width = 77
       Height = 13
-      Caption = 'C'#243'd. Prod'
+      Caption = 'C'#243'd. Prod ( F5 )'
       FocusControl = edtCodItem
     end
     object Label7: TLabel
@@ -174,6 +175,7 @@ inherited frmVendas: TfrmVendas
       FocusControl = edtValor
     end
     object edtCodItem: TDBEdit
+      Tag = 2
       Left = 6
       Top = 32
       Width = 100
@@ -348,7 +350,6 @@ inherited frmVendas: TfrmVendas
     Top = 280
   end
   inherited qryTabela: TFDQuery
-    OnNewRecord = qryTabelaNewRecord
     AfterApplyUpdates = qryTabelaAfterApplyUpdates
     SQL.Strings = (
       'SELECT * FROM PEDIDOS')

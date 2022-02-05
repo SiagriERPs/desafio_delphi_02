@@ -8,7 +8,9 @@ uses
   uProdutos in 'uProdutos.pas' {frmProdutos},
   udmDados in 'udmDados.pas' {dmDados: TDataModule},
   uVendas in 'uVendas.pas' {frmVendas},
-  uSolicitacaoReceita in 'uSolicitacaoReceita.pas' {frmSolicitacaoReceita};
+  uSolicitacaoReceita in 'uSolicitacaoReceita.pas' {frmSolicitacaoReceita},
+  uFuncoes in 'uFuncoes.pas',
+  uPesquisa in 'uPesquisa.pas' {frmPesquisa};
 
 {$R *.res}
 
@@ -16,6 +18,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
-  Application.CreateForm(TfrmSolicitacaoReceita, frmSolicitacaoReceita);
   Application.Run;
 end.

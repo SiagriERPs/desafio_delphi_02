@@ -53,9 +53,9 @@ inherited frmSolicitacaoReceita: TfrmSolicitacaoReceita
   object Label7: TLabel [6]
     Left = 10
     Top = 92
-    Width = 36
+    Width = 65
     Height = 13
-    Caption = 'T'#233'cnico'
+    Caption = 'T'#233'cnico ( F5 )'
     FocusControl = edtCodTecnico
   end
   object Label8: TLabel [7]
@@ -186,6 +186,7 @@ inherited frmSolicitacaoReceita: TfrmSolicitacaoReceita
     TabOrder = 14
   end
   object edtCodTecnico: TDBEdit [22]
+    Tag = 3
     Left = 10
     Top = 108
     Width = 100
@@ -245,6 +246,7 @@ inherited frmSolicitacaoReceita: TfrmSolicitacaoReceita
     TitleFont.Style = []
   end
   inherited qryTabela: TFDQuery
+    AfterScroll = qryTabelaAfterScroll
     object qryTabelaPEDI_ID: TIntegerField
       DisplayLabel = 'Pedido Nr'#186
       FieldName = 'PEDI_ID'
@@ -336,17 +338,21 @@ inherited frmSolicitacaoReceita: TfrmSolicitacaoReceita
   end
   object qryItens: TFDQuery
     CachedUpdates = True
-    IndexFieldNames = 'ITEM_PEDI_ID'
     MasterSource = dsTabela
-    MasterFields = 'PEDI_ID'
-    DetailFields = 'ITEM_PEDI_ID'
     Connection = dmDados.Conexao
     FetchOptions.AssignedValues = [evLiveWindowParanoic, evDetailCascade]
     FetchOptions.LiveWindowParanoic = False
     SQL.Strings = (
-      'SELECT * FROM ITENSPEDIDO')
+      'SELECT * FROM ITENSPEDIDO WHERE ITEM_PEDI_ID = :PEDI_ID')
     Left = 384
     Top = 352
+    ParamData = <
+      item
+        Name = 'PEDI_ID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
     object qryItensITEM_ID: TIntegerField
       DisplayLabel = 'Nr'#186
       FieldName = 'ITEM_ID'

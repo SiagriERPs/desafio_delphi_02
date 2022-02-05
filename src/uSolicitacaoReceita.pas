@@ -57,6 +57,9 @@ type
     procedure FormShow(Sender: TObject);
     procedure btnSalvarClick(Sender: TObject);
     procedure edtCodTecnicoExit(Sender: TObject);
+    procedure qryTabelaAfterScroll(DataSet: TDataSet);
+    procedure btnNovoClick(Sender: TObject);
+    procedure qryTabelaNewRecord(DataSet: TDataSet);
   private
     function ValidaDados: Boolean;
     procedure OpenFDQuery;
@@ -72,7 +75,13 @@ implementation
 
 {$R *.dfm}
 
-uses udmDados;
+uses udmDados, uFuncoes;
+
+procedure TfrmSolicitacaoReceita.btnNovoClick(Sender: TObject);
+begin
+  Exit;
+  inherited;
+end;
 
 procedure TfrmSolicitacaoReceita.btnSalvarClick(Sender: TObject);
 begin
@@ -86,6 +95,19 @@ begin
   qryTabela.Close;
   qryTabela.Unprepare;
   qryTabela.Open;
+end;
+
+procedure TfrmSolicitacaoReceita.qryTabelaAfterScroll(DataSet: TDataSet);
+begin
+  inherited;
+  qryItens.Close;
+  qryItens.ParamByName('PEDI_ID').AsInteger := qryTabela.FieldByName('PEDI_ID').AsInteger;
+  qryItens.Open();
+end;
+
+procedure TfrmSolicitacaoReceita.qryTabelaNewRecord(DataSet: TDataSet);
+begin
+//  inherited;
 end;
 
 function TfrmSolicitacaoReceita.ValidaDados() : Boolean;
@@ -107,18 +129,20 @@ end;
 
 procedure TfrmSolicitacaoReceita.edtCodTecnicoExit(Sender: TObject);
 begin
+  if not (qryTabela.State in [dsEdit,dsInsert]) then
+    qryTabela.Edit;
   if Trim(edtCodTecnico.Text) = '' then Exit;
   if not edtCodTecnico.Modified then Exit;
-  if not (qryTabela.State in [dsEdit,dsInsert]) then Exit;
   inherited;
-  dmDados.PesquisaTecnico(qryTabela,edtCodTecnico.Text);
+  PesquisaTecnico(qryTabela,edtCodTecnico.Text);
 end;
 
 procedure TfrmSolicitacaoReceita.FormShow(Sender: TObject);
 begin
   SQL := 'SELECT * FROM PEDIDOS WHERE PEDI_STATUS = ''A'' ORDER BY PEDI_ID DESC';
   inherited;
-  qryItens.Open();
+  if not qryTabela.IsEmpty then
+    qryTabela.Edit;
 end;
 
 initialization

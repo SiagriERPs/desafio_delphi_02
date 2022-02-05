@@ -18,6 +18,7 @@ object frmBasico: TfrmBasico
   KeyPreview = True
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnShow = FormShow
   DesignSize = (

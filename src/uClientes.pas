@@ -34,7 +34,7 @@ implementation
 
 {$R *.dfm}
 
-uses udmDados;
+uses udmDados, uFuncoes;
 
 procedure TfrmClientes.btnSalvarClick(Sender: TObject);
 begin
@@ -105,10 +105,10 @@ begin
       edtCPF.SetFocus;
     Exit;
   end;
-  strMSG := dmDados.CPFJaExiste('CLIENTES',
-                                'CLIE',
-                                qryTabela.FieldByName('CLIE_CPF').AsString,
-                                qryTabela.FieldByName('CLIE_ID').AsInteger);
+  strMSG := CPFJaExiste('CLIENTES',
+                        'CLIE',
+                        qryTabela.FieldByName('CLIE_CPF').AsString,
+                        qryTabela.FieldByName('CLIE_ID').AsInteger);
   if Trim(strMSG)<>'' then
   begin
     ShowMessage('Já consta um cliente para o CPF informado!'+#13#13+strMSG);

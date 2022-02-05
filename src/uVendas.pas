@@ -84,7 +84,7 @@ implementation
 
 {$R *.dfm}
 
-uses udmDados;
+uses uFuncoes;
 
 procedure TfrmVendas.btnAdicionaClick(Sender: TObject);
 begin
@@ -194,20 +194,22 @@ end;
 
 procedure TfrmVendas.edtCodClienteExit(Sender: TObject);
 begin
+  if not (qryTabela.State in [dsEdit,dsInsert]) then
+    qryTabela.Append;
   if Trim(edtCodCliente.Text) = '' then Exit;
   if not edtCodCliente.Modified then Exit;
-  if not (qryTabela.State in [dsEdit,dsInsert]) then Exit;
   inherited;
-  dmDados.PesquisaCliente(qryTabela,edtCodCliente.Text);
+  PesquisaCliente(qryTabela,edtCodCliente.Text);
 end;
 
 procedure TfrmVendas.edtCodItemExit(Sender: TObject);
 begin
+  if not (qryItens.State in [dsEdit,dsInsert]) then
+    qryItens.Append;
   if Trim(edtCodItem.Text) = '' then Exit;
   if not edtCodItem.Modified then Exit;
-  if not (qryItens.State in [dsEdit,dsInsert]) then Exit;
   inherited;
-  dmDados.PesquisaProduto(qryItens,edtCodItem.Text);
+  PesquisaProduto(qryItens,edtCodItem.Text);
 end;
 
 procedure TfrmVendas.FormCreate(Sender: TObject);
@@ -234,7 +236,7 @@ end;
 procedure TfrmVendas.qryItensAfterInsert(DataSet: TDataSet);
 begin
   inherited;
-  qryItens.FieldByName('ITEM_ID').AsInteger      := dmDados.Generation('ITENSPEDIDO');
+  qryItens.FieldByName('ITEM_ID').AsInteger      := Generation('ITENSPEDIDO');
   qryItens.FieldByName('ITEM_PEDI_ID').AsInteger := qryTabela.FieldByName('PEDI_ID').AsInteger;
 end;
 
@@ -278,6 +280,7 @@ begin
   qryItens.Close;
   qryItens.ParamByName('PEDI_ID').AsInteger := qryTabela.FieldByName('PEDI_ID').AsInteger;
   qryItens.Open();
+  qryItens.Append;
 end;
 
 initialization

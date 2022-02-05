@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Data.DB, Datasnap.DBClient,
-  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, uFuncoes,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Vcl.Mask, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids;
@@ -29,7 +29,9 @@ type
     procedure btnNovoClick(Sender: TObject);
     procedure qryTabelaNewRecord(DataSet: TDataSet);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
   private
+    procedure OnKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   public
     GeneID,
     Table : String;
@@ -44,7 +46,7 @@ implementation
 
 {$R *.dfm}
 
-uses udmDados;
+uses udmDados, uPesquisa;
 
 procedure TfrmBasico.btnNovoClick(Sender: TObject);
 begin
@@ -58,6 +60,7 @@ begin
   try
     if (qryTabela.State in [dsEdit,dsInsert]) then
       qryTabela.ApplyUpdates(-1);
+    btnNovo.Click;
   except on e: exception do
     ShowMessage('Erro ao tentar salvar o registro!'+#13#13+'Error: '+e.Message);
   end;
@@ -69,6 +72,41 @@ begin
     btnSalvar.Enabled := true
   else btnSalvar.Enabled := false;
   btnNovo.Enabled := not btnSalvar.Enabled;
+end;
+
+procedure TfrmBasico.OnKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if ((Shift = [ssAlt]) and (key = 40)) or (key = VK_F5) then
+  begin
+    if (TDBEdit(Sender).Tag) > 0 then
+    begin
+      frmPesquisa.qryPesquisa.SQL.Text := Pesquisa(TDBEdit(Sender).Tag);
+      frmPesquisa.ShowModal;
+      TDBEdit(Sender).Text := frmPesquisa.qryPesquisa.Fields[1].AsString;
+      if Trim(TDBEdit(Sender).Text) <> '' then
+      begin
+        TDBEdit(Sender).Modified := true;
+        TDBEdit(Sender).OnExit(Sender);
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmBasico.FormCreate(Sender: TObject);
+var
+  intI     : Integer;
+  strField : String;
+begin
+  for intI := 0 to Self.ComponentCount - 1 do
+  begin
+    if (Components[intI] is TDBEdit) then
+    begin
+      (Components[intI] as TDBEdit).CharCase := ecUpperCase;
+      if ((Components[intI] as TDBEdit).Tag > 0) then
+        (Components[intI] as TDBEdit).OnKeyDown := OnKeyDown;
+    end;
+  end;
 end;
 
 procedure TfrmBasico.FormKeyDown(Sender: TObject; var Key: Word;
@@ -94,12 +132,11 @@ end;
 procedure TfrmBasico.OpenFDQuery;
 begin
   inherited;
-
 end;
 
 procedure TfrmBasico.qryTabelaNewRecord(DataSet: TDataSet);
 begin
-  qryTabela.FieldByName(GeneID).AsInteger := dmDados.Generation(Table);
+  qryTabela.FieldByName(GeneID).AsInteger := Generation(Table);
 end;
 
 procedure TfrmBasico.btnCancelarClick(Sender: TObject);
