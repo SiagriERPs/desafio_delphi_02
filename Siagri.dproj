@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{143BEBC9-1925-47DC-9EA8-5C65A6FB8BFE}</ProjectGuid>
+        <ProjectGuid>{233731BC-FE8F-46E9-83DA-B96516428DD9}</ProjectGuid>
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
@@ -83,9 +83,9 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
+        <DCC_ExeOutput>.\bin</DCC_ExeOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <DCC_ExeOutput>C:\Users\cristiano\Desktop\desafio_delphi_02\bin\</DCC_ExeOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -101,75 +101,75 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Infra\Biblioteca.pas"/>
-        <DCCReference Include="Infra\Tipos.pas"/>
-        <DCCReference Include="Infra\UDatamoduleGeral.pas">
+        <DCCReference Include="src\Infra\Biblioteca.pas"/>
+        <DCCReference Include="src\Infra\Tipos.pas"/>
+        <DCCReference Include="src\Infra\UDatamoduleGeral.pas">
             <Form>DataModuleGeral</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="Model\Conexao\Model.Conexao.Firedac.pas"/>
-        <DCCReference Include="Model\Conexao\Model.Conexao.Interfaces.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAO.Interfaces.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAOCliente.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAOProduto.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAOTecnicoAgricola.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAOVendaCabecalho.pas"/>
-        <DCCReference Include="Model\DAO\Model.DAOVendaDetalhe.pas"/>
-        <DCCReference Include="Model\Entidades\Model.Entidade.Cliente.pas"/>
-        <DCCReference Include="Model\Entidades\Model.Entidade.Produto.pas"/>
-        <DCCReference Include="Model\Entidades\Model.Entidade.TecnicoAgricola.pas"/>
-        <DCCReference Include="Model\Entidades\Model.Entidade.VendaCabecalho.pas"/>
-        <DCCReference Include="Model\Entidades\Model.Entidade.VendaDetalhe.pas"/>
-        <DCCReference Include="Controller\Controller.Controller.pas"/>
-        <DCCReference Include="Controller\Controller.Entidades.pas"/>
-        <DCCReference Include="Controller\Controller.Interfaces.pas"/>
-        <DCCReference Include="Controller\Controller.VendaCabecalho.pas"/>
-        <DCCReference Include="View\UMenu.pas">
+        <DCCReference Include="src\Model\Conexao\Model.Conexao.Firedac.pas"/>
+        <DCCReference Include="src\Model\Conexao\Model.Conexao.Interfaces.pas"/>
+        <DCCReference Include="src\Model\Entidades\Model.Entidade.Cliente.pas"/>
+        <DCCReference Include="src\Model\Entidades\Model.Entidade.Produto.pas"/>
+        <DCCReference Include="src\Model\Entidades\Model.Entidade.TecnicoAgricola.pas"/>
+        <DCCReference Include="src\Model\Entidades\Model.Entidade.VendaCabecalho.pas"/>
+        <DCCReference Include="src\Model\Entidades\Model.Entidade.VendaDetalhe.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAO.Interfaces.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAOCliente.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAOProduto.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAOTecnicoAgricola.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAOVendaCabecalho.pas"/>
+        <DCCReference Include="src\Model\DAO\Model.DAOVendaDetalhe.pas"/>
+        <DCCReference Include="src\Controller\Controller.Controller.pas"/>
+        <DCCReference Include="src\Controller\Controller.Entidades.pas"/>
+        <DCCReference Include="src\Controller\Controller.Interfaces.pas"/>
+        <DCCReference Include="src\Controller\Controller.VendaCabecalho.pas"/>
+        <DCCReference Include="src\View\UMenu.pas">
             <Form>FMenu</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\UViewPadrao.pas">
+        <DCCReference Include="src\View\UViewPadrao.pas">
             <Form>FPadrao</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\UViewPadraoDetalhe.pas">
+        <DCCReference Include="src\View\UViewPadraoDetalhe.pas">
             <Form>FPadraoDetalhe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\UViewPadraoPesquisa.pas">
+        <DCCReference Include="src\View\UViewPadraoPesquisa.pas">
             <Form>FormPadraoPesquisa</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.Cliente.pas">
+        <DCCReference Include="src\View\View.Cliente.pas">
             <Form>FormCliente</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.Cliente.Pesquisa.pas">
+        <DCCReference Include="src\View\View.Cliente.Pesquisa.pas">
             <Form>FormClientePesquisa</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.ConferenciaReceita.pas">
+        <DCCReference Include="src\View\View.ConferenciaReceita.pas">
             <Form>FormConferenciaReceita</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.Produto.pas">
+        <DCCReference Include="src\View\View.Produto.pas">
             <Form>FormProduto</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.Produto.Pesquisa.pas">
+        <DCCReference Include="src\View\View.Produto.Pesquisa.pas">
             <Form>FormProdutoPesquisa</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.TecnicoAgricola.Pesquisa.pas">
+        <DCCReference Include="src\View\View.TecnicoAgricola.Pesquisa.pas">
             <Form>FormTecnicoAgricolaPesquisa</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.Venda.pas">
+        <DCCReference Include="src\View\View.Venda.pas">
             <Form>FormVenda</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="View\View.VendaDetalhe.pas">
+        <DCCReference Include="src\View\View.VendaDetalhe.pas">
             <Form>FormVendaDetalhe</Form>
             <FormType>dfm</FormType>
         </DCCReference>
